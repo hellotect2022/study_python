@@ -32,7 +32,7 @@ def paint_plot():
     with open('./write.txt','r') as file:
         for line in file:
             x_str, y_str = line.strip().split('|')
-            x_data.append(x_str)
+            x_data.append(x_str.replace(" ","\n"))
             y_data.append(int(y_str))
     # 선 그래프 그리기
 
@@ -50,16 +50,31 @@ def paint_plot():
 
     # X 축 눈금 갯수 제한
     plt.gca().xaxis.set_major_locator(MaxNLocator(nbins=3))  # 5개의 눈금으로 제한
-
+   
     # Y 축 눈금 갯수 제한
     plt.gca().yaxis.set_major_locator(MaxNLocator(nbins=3))  # 3개의 눈금으로 제한
-     # y축 뒤집기
-    #plt.gca().invert_yaxis()
-    #plt.locator_params(axis='x', nbins=3)
+    
+     # 마지막 데이터 값 표시
+    last_x = x_data[-1]
+    last_y = y_data[-1]
+    plt.text(last_x, last_y, f'{last_y}', ha='right', va='bottom', color='r')
+
+    # 마지막 데이터의 x 위치에 눈금 추가
+     # 현재 눈금 가져오기
+    current_ticks = [tick.get_text() for tick in plt.gca().get_xticklabels() if tick.get_text() != '']
+    
+    # for tick in plt.gca().get_xticklabels():
+    #     print("tick",tick)
+    
+    current_ticks.append(last_x)
+    # 마지막 데이터의 x 위치에 눈금 추가
+    plt.xticks(current_ticks, rotation=0)
+  
+
     # 그래프 표시
     plt.show()
 
-read_file()
+#read_file()
 paint_plot()
 
 #
